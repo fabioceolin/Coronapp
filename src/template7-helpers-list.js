@@ -5,4 +5,4 @@
   For example:
   module.exports = ['custom-helper', 'formatDate'];
 */
-module.exports = ['foo'];
+module.exports = ['foo', './js/chartscript.js'];

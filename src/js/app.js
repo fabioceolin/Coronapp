@@ -17,10 +17,11 @@ import App from '../app.f7.html';
 
 import Script from './chartscript'
 import Controller from './apicontroller'
+
 var app = new Framework7({
   root: '#app', // App root element
   component: App, // App main component
-  id: 'io.framework7.coronapp', // App bundle ID
+  id: 'br.com.coronapp', // App bundle ID
   name: 'Coronapp', // App name
   theme: 'auto', // Automatic theme detection
 
