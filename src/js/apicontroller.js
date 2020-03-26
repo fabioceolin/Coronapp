@@ -3,13 +3,25 @@ import Framework7 from 'framework7/framework7.esm.bundle.js';
 
 var paises;
 
-    $$(document).on('page:init', getCountrySummary)//se n chamar c o () vai retornar a instancia da funcao, 
+    $$(document).on('page:init', test)//se n chamar c o () vai retornar a instancia da funcao, 
     //aqui to chamando assim pq o on vai invokar a instnacia da funcao
 
 
     function getWorldData(){
     Framework7.request.get('https://api.covid19api.com/summary',null, function (data) {
         var todos = JSON.parse(data)
+
+        var testeDoTeste = localStorage["teste"]
+
+        if(testeDoTeste === "Teste"){
+            console.log("DADOS IN MEMORY MLK DO CARALHOOOOO PORRAAA")
+        }else{
+            localStorage["teste"] = "Teste"
+            console.log("N TINHA NADA NA PARADA LA ENTAO COLOCAMOS ESSA PORRA PRA TESTAR VLW E NOIS")
+        }
+
+
+        localStorage["CountryData"] = JSON.stringify(todos)
         let deaths = 0
         let recovereds = 0
         let cases = 0
@@ -33,6 +45,11 @@ function getCountriesList(){
         console.log({paises:paises})
         return paises
     })
+}
+
+function test(){
+    getWorldData()
+    console.log(localStorage["CountryData"])
 }
 
 function getCountrySummary(country){
