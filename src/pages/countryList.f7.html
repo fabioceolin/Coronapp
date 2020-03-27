@@ -1,0 +1,68 @@
+<template>
+    <div class="page" data-name="countryList">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="title">Countries</div>
+                <div class="right">
+                    <!-- Link to enable searchbar -->
+                    <a class="link icon-only searchbar-enable" data-searchbar=".searchbar">
+                        <i class="icon f7-icons if-not-md">search</i>
+                        <i class="icon material-icons md-only">search</i>
+                    </a>
+                </div>
+                <!-- Searchbar is a direct child of "navbar-inner" -->
+                <form class="searchbar searchbar-expandable">
+                    <div class="searchbar-inner">
+                        <div class="searchbar-input-wrap">
+                            <input type="search" placeholder="Search" />
+                            <i class="searchbar-icon"></i>
+                            <span class="input-clear-button"></span>
+                        </div>
+                        <span class="searchbar-disable-button">Cancel</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="list simple-list">
+                <ul id="countries">
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import $$ from 'dom7'
+    import Framework7 from 'framework7/framework7.esm.bundle.js';
+    export default {
+        methods: {
+            // getCountriesList: function () {
+            //     Framework7.request.get('https://api.covid19api.com/countries', null, function (data) {
+            //         var todos = JSON.parse(data)
+            //         var comp = $$('#countries');
+            //         var paises = []
+            //         todos.forEach(element => {
+            //             comp.append('<li>'+element.Country+'</li>')
+            //         })
+            //         console.log({ paises: paises })
+            //         data: paises
+            //     })
+            // },
+        },
+        on: {
+            pageMounted: function (e, page) {
+                Framework7.request.get('https://api.covid19api.com/countries', null, function (data) {
+                    var todos = JSON.parse(data)
+                    var comp = $$('#countries');
+                    var paises = []
+                    todos.forEach(element => {
+                        comp.append('<li>' + element.Country + '</li>')
+                    })
+                    console.log({ paises: paises })
+                    data: paises
+                })
+            },
+        },
+    }
+</script>

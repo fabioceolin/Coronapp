@@ -15,8 +15,9 @@ import routes from './routes.js';
 // Import main app component
 import App from '../app.f7.html';
 
-import Script from './chartscript'
-import Controller from './apicontroller'
+// Custom Import
+// import Script from './chartscript'
+// import Controller from './apicontroller'
 
 var app = new Framework7({
   root: '#app', // App root element

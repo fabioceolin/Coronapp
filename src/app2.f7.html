@@ -1,0 +1,28 @@
+<template>
+  <div id="app">
+    {{#if loggedIn}}
+      <div class="view view-main view-init" id="view-main" data-url="/"></div>
+    {{else}}
+      <div class="login-screen modal-in">
+        <div class="view view-init" id="view-auth" data-url="/login/"></div>
+      </div>
+    {{/if}}
+  </div>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        loggedIn: true,
+      }
+    },
+    methods: {
+      login() {
+        this.$setState({ loggedIn: true });
+      },
+      logout() {
+        this.$setState({ loggedIn: false });
+      },
+    },
+  }
+</script>

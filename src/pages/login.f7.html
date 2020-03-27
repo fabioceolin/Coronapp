@@ -23,7 +23,8 @@
                 <div class="item-inner">
                   <div class="item-title item-label">Username</div>
                   <div class="item-input-wrap">
-                    <input type="text" name="username" placeholder="Username">
+                    <input type="text" name="username" placeholder="Username" value="{{username}}"
+                      @input="updateUsername">
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
@@ -32,7 +33,8 @@
                 <div class="item-inner">
                   <div class="item-title item-label">Password</div>
                   <div class="item-input-wrap">
-                    <input type="password" name="password" placeholder="Password">
+                    <input type="password" name="password" placeholder="Password" value="{{password}}"
+                      @input="updatePassword">
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
@@ -42,7 +44,7 @@
           <div class="list">
             <ul>
               <li>
-                <a href="#" class="item-link list-button">Sign In</a>
+                <a href="#" class="item-link list-button" @click="alertLoginData">Sign In</a>
               </li>
             </ul>
             <div class="list-block">
@@ -56,5 +58,27 @@
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+    data() {
+      return {
+        // Login screen demo data
+        username: '',
+        password: '',
+
+      };
+    },
+    methods: {
+      updateUsername(e) {
+        this.username = e.target.value;
+        this.$update();
+      },
+      updatePassword(e) {
+        this.password = e.target.value;
+        this.$update();
+      },
+      alertLoginData() {
+        this.$f7.dialog.alert('Username: ' + this.username + '<br>Password: ' + this.password);
+      }
+    },
+  }
 </script>
