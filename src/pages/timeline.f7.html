@@ -1,0 +1,81 @@
+<template>
+    <div class="page color-theme-green">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Timeline</div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="block-title">Rich Content</div>
+            <div class="timeline" id="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-item-date">22 <small>DEC</small></div>
+                    <div class="timeline-item-divider"></div>
+                    <div class="timeline-item-content">
+                        <div class="timeline-item-inner">
+                            <div class="timeline-item-time">15:07</div>
+                            <div class="timeline-item-title">Item Title</div>
+                            <div class="timeline-item-subtitle">Item Subtitle</div>
+                            <div class="timeline-item-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                Dolor fugiat ipsam hic porro enim, accusamus perferendis, quas commodi alias quaerat
+                                eius nemo deleniti. Odio quasi quos quis iure, aperiam pariatur?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import $$ from 'dom7'
+    import Framework7 from 'framework7/framework7.esm.bundle.js';
+    export default {
+        on: {
+            pageMounted: function (e, page) {
+                var div = $$('#timeline');
+                var self = this;
+                self.$app.dialog.preloader();
+                if (!(typeof country === 'string')) {
+                    country = 'brazil'
+                }
+                let baseUrl = 'https://api.covid19api.com/dayone/country/' + 'brazil' + '/status/'
+
+                Framework7.request.get(baseUrl + 'confirmed/live', null, function (data) {
+                    var confirmed = JSON.parse(data)
+                })
+                Framework7.request.get(baseUrl + 'deaths/live', null, function (data) {
+                    var deaths = JSON.parse(data)
+                })
+                Framework7.request.get(baseUrl + 'recovered/live', null, function (data) {
+                    var recovered = JSON.parse(data)
+                })
+                
+                div.append(
+                    `<div class="timeline-item">
+                    <div class="timeline-item-date">22 <small>DEC</small></div>
+                    <div class="timeline-item-divider"></div>
+                    <div class="timeline-item-content">
+                        <div class="timeline-item-inner">
+                            <div class="timeline-item-time">15:07</div>
+                            <div class="timeline-item-title">Item Title</div>
+                            <div class="timeline-item-subtitle">Item Subtitle</div>
+                            <div class="timeline-item-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                Dolor fugiat ipsam hic porro enim, accusamus perferendis, quas commodi alias quaerat
+                                eius nemo deleniti. Odio quasi quos quis iure, aperiam pariatur?</div>
+                        </div>
+                    </div>
+                </div>`
+                )
+
+                self.$app.dialog.close();
+            },
+        },
+    }
+</script>

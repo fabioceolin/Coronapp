@@ -3,7 +3,7 @@ import Framework7 from 'framework7/framework7.esm.bundle.js';
 
 var paises;
 
-    $$(document).on('page:init', CriarUsuario)//se n chamar c o () vai retornar a instancia da funcao, 
+    $$(document).on('page:init', test)//se n chamar c o () vai retornar a instancia da funcao, 
     //aqui to chamando assim pq o on vai invokar a instnacia da funcao
 
 
@@ -80,7 +80,7 @@ function Autenticar(usuario,senha){
 
 
 function test(){
-    getWorldData()
+    getCountrySummary('brazil')
     console.log(localStorage["CountryData"])
 }
 
@@ -106,6 +106,24 @@ function getCountrySummary(country){
         var res = {confirmados:confirmados, mortos:mortos, curados:curados, date:todososmortos[todososmortos.length -1].Date}
         console.log(res)
         return res
+    })
+
+}
+
+function getDayOneLive(country){
+    if(!(typeof country === 'string')){
+        country = 'brazil'
+    }
+    let baseUrl = 'https://api.covid19api.com/dayone/country/'+country+'/status/'
+    
+    Framework7.request.get(baseUrl+'confirmed/live', null, function(data){
+        var confirmed = JSON.parse(data)
+    })
+    Framework7.request.get(baseUrl+'deaths/live', null, function(data){
+        var deaths = JSON.parse(data)
+    })
+    Framework7.request.get(baseUrl+'recovered/live', null, function(data){
+        var recovered = JSON.parse(data)
     })
 
 }

@@ -64,6 +64,8 @@
         },
         on: {
             pageMounted: function (e, page) {
+                var self = this;
+                self.$app.dialog.preloader();
                 Framework7.request.get('https://api.covid19api.com/countries', null, function (data) {
                     var todos = JSON.parse(data)
                     var comp = $$('#countries');
@@ -77,6 +79,7 @@
                             </li>`
                         )
                     })
+                    self.$app.dialog.close();
                     console.log({ paises: paises })
                 })
             },

@@ -9,6 +9,7 @@ import ChartPage from '../pages/charts.f7.html';
 import CountryListPage from '../pages/countryList.f7.html'
 import test from '../pages/test.f7.html'
 import summaryPage from '../pages/summary.f7.html'
+import timelinePage from '../pages/timeline.f7.html'
 
 import DynamicRoutePage from '../pages/dynamic-route.f7.html';
 import RequestAndLoad from '../pages/request-and-load.f7.html';
@@ -42,6 +43,10 @@ var routes = [
   {
     path: '/summary/',
     component: summaryPage,
+  },
+  {
+    path: '/timeline/',
+    component: timelinePage,
   },
   {
     path: '/test/',
