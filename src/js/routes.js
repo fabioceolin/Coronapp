@@ -6,7 +6,9 @@ import FormPage from '../pages/form.f7.html';
 // Custom Pages
 import LoginPage from '../pages/login.f7.html';
 import ChartPage from '../pages/charts.f7.html';
-import CountryListPages from '../pages/countryList.f7.html'
+import CountryListPage from '../pages/countryList.f7.html'
+import test from '../pages/test.f7.html'
+import summaryPage from '../pages/summary.f7.html'
 
 import DynamicRoutePage from '../pages/dynamic-route.f7.html';
 import RequestAndLoad from '../pages/request-and-load.f7.html';
@@ -35,7 +37,15 @@ var routes = [
   },
   {
     path: '/countryList/',
-    component: CountryListPages,
+    component: CountryListPage,
+  },
+  {
+    path: '/summary/',
+    component: summaryPage,
+  },
+  {
+    path: '/test/',
+    component: test,
   },
 
 

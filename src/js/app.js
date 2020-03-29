@@ -3,6 +3,7 @@ import Framework7 from 'framework7/framework7.esm.bundle.js';
 
 // Import F7 Styles
 import 'framework7/css/framework7.bundle.css';
+import '../fonts/framework7-icons.css'
 
 // Import Icons and App Custom Styles
 import '../css/icons.css';
