@@ -3,7 +3,7 @@ import Framework7 from 'framework7/framework7.esm.bundle.js';
 
 var paises;
 
-    $$(document).on('page:init', test)//se n chamar c o () vai retornar a instancia da funcao, 
+    $$(document).on('page:init', CriarUsuario)//se n chamar c o () vai retornar a instancia da funcao, 
     //aqui to chamando assim pq o on vai invokar a instnacia da funcao
 
 
@@ -46,6 +46,38 @@ function getCountriesList(){
         return paises
     })
 }
+
+//xamarin >>>>>> abismo >>>>> cordova
+
+// quando for usar esse metodo remover a linha que eu seto o padrao, infelizmente gracas a essa plataforma MERDA eu so consigo testar essa porra assim
+function CriarUsuario(usuario,senha){
+
+    usuario = 'Teste'
+    senha = 'Teste'
+    let user = {nomeUsuario:usuario, senha:senha}
+    Framework7.request.post('https://ienvironmentrestapi.azurewebsites.net/api/Usuario', user, function(data){
+        console.log('Sucesso')
+        return true
+    }, function(data){
+        console.log('Fail')
+        return false
+    })
+}
+
+function Autenticar(usuario,senha){
+
+    usuario = 'Teste'
+    senha = 'Teste'
+    let user = {nomeUsuario:usuario, senha:senha}
+    Framework7.request.post('https://ienvironmentrestapi.azurewebsites.net/api/Autenticar', user, function(data){
+        console.log('Sucesso')
+        return true
+    }, function(data){
+        console.log('Fail')
+        return false
+    })
+}
+
 
 function test(){
     getWorldData()

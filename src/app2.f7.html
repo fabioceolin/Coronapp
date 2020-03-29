@@ -17,6 +17,12 @@
       }
     },
     methods: {
+      criarUsuario(usuario, senha){
+        usuario = 'teste'
+        senha = '123'
+        var User = {nomeUsuario:usuario,senha:senha}
+        this.$f7
+      },
       login() {
         this.$setState({ loggedIn: true });
       },
