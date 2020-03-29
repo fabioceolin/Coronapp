@@ -42,21 +42,53 @@
                 var div = $$('#timeline');
                 var self = this;
                 self.$app.dialog.preloader();
-                if (!(typeof country === 'string')) {
-                    country = 'brazil'
+                if (!(typeof this.country === 'string')) {
+                    this.country = 'brazil'
                 }
-                let baseUrl = 'https://api.covid19api.com/dayone/country/' + 'brazil' + '/status/'
+                let baseUrl = 'https://api.covid19api.com/dayone/country/' + this.country + '/status/'
+
+                let CoronaDados = []
 
                 Framework7.request.get(baseUrl + 'confirmed/live', null, function (data) {
                     var confirmed = JSON.parse(data)
+                    confirmed.forEach((element) => {
+                        CoronaDados.push({date:element.Date,confirmados:element.Cases,mortos:0,curados:0})
+                    });
+                    getDeaths()
                 })
-                Framework7.request.get(baseUrl + 'deaths/live', null, function (data) {
-                    var deaths = JSON.parse(data)
-                })
-                Framework7.request.get(baseUrl + 'recovered/live', null, function (data) {
-                    var recovered = JSON.parse(data)
-                })
-                
+              
+                function getDeaths(){
+                    Framework7.request.get(baseUrl + 'deaths/live', null, function (data) {
+                        var deaths = JSON.parse(data)
+                        let atual
+                        let atualposicao
+                        deaths.forEach((element, index)=>{
+                            atual = CoronaDados.filter(obj =>{
+                                return obj.date == element.Date
+                            })[0]
+                            atualposicao = CoronaDados.indexOf(atual)
+                            CoronaDados[atualposicao].mortos = element.Cases
+                        })
+                        getRecovereds()
+                    })
+                }
+              
+                function getRecovereds(){
+                    Framework7.request.get(baseUrl + 'recovered/live', null, function (data) {
+                        var recovered = JSON.parse(data)
+                        let atual
+                        let atualposicao
+                        recovered.forEach((element, index)=>{
+                            atual = CoronaDados.filter(obj =>{
+                                return obj.date == element.Date
+                            })[0]
+                            atualposicao = CoronaDados.indexOf(atual)
+                            CoronaDados[atualposicao].curados = element.Cases
+                        })
+                        self.$app.dialog.alert(JSON.stringify(CoronaDados))
+                    })
+                }
+
                 div.append(
                     `<div class="timeline-item">
                     <div class="timeline-item-date">22 <small>DEC</small></div>
