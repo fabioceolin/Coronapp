@@ -43,7 +43,7 @@ var routes = [
     component: summaryPage,
   },
   {
-    path: '/timeline/country/:countrySlug/',
+    path: '/timeline/country/:countrySlug/countryName/:countryName',
     component: timelinePage,
   },
 

@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="page-content">
-            <div class="block-title text-align-center" id="countryTitle">Brazil</div>
+            <div class="block-title text-align-center" id="countryTitle"></div>
             <div class="timeline timeline-sides" id="timeline">
 
             </div>
@@ -28,16 +28,17 @@
         on: {
             pageMounted: function (e, page) {
                 var div = $$('#timeline');
-                var title = $$('countryTitle');
+                var title = $$('#countryTitle');
                 var self = this;
                 self.$app.dialog.preloader();
                 var countrySlug = this.$route.params.countrySlug
+                var countryName = this.$route.params.countryName
                 if (!(typeof countrySlug === 'string')) {
                     countrySlug = 'brazil'
                 }
                 let baseUrl = 'https://api.covid19api.com/total/country/' + countrySlug + '/status/'
 
-                title.append(countrySlug);
+                title.append(countryName);
 
                 var CoronaDados = []
 
