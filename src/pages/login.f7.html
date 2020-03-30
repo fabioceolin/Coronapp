@@ -1,59 +1,47 @@
 <template>
-  <div class="view view-init" data-name="login">
-    <!-- <div class="navbar">
-        <div class="navbar-bg"></div>
-        <div class="navbar-inner sliding">
-          <div class="left">
-            <a href="#" class="link back">
-              <i class="icon icon-back"></i>
-              <span class="if-not-md">Back</span>
-            </a>
-          </div>
-          <div class="title">About</div>
+  <div class="page no-toolbar no-navbar no-swipeback login-screen-page">
+    <div class="page-content login-screen-content">
+      <div class="login-screen-title">Coronapp</div>
+      <!-- Login form -->
+      <form>
+        <div class="list">
+          <ul>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Username</div>
+                <div class="item-input-wrap">
+                  <input type="text" name="username" placeholder="Username" value="{{username}}"
+                    @input="updateUsername">
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+            <li class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label">Password</div>
+                <div class="item-input-wrap">
+                  <input type="password" name="password" placeholder="Password" value="{{password}}"
+                    @input="updatePassword">
+                  <span class="input-clear-button"></span>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
-      </div> -->
-    <div class="page-content">
-      <div class="page-content login-screen-content">
-        <div class="login-screen-title">Coronapp</div>
-        <!-- Login form -->
-        <form>
-          <div class="list">
-            <ul>
-              <li class="item-content item-input">
-                <div class="item-inner">
-                  <div class="item-title item-label">Username</div>
-                  <div class="item-input-wrap">
-                    <input type="text" name="username" placeholder="Username" value="{{username}}"
-                      @input="updateUsername">
-                    <span class="input-clear-button"></span>
-                  </div>
-                </div>
-              </li>
-              <li class="item-content item-input">
-                <div class="item-inner">
-                  <div class="item-title item-label">Password</div>
-                  <div class="item-input-wrap">
-                    <input type="password" name="password" placeholder="Password" value="{{password}}"
-                      @input="updatePassword">
-                    <span class="input-clear-button"></span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="list">
-            <ul>
-              <li>
-                <a href="#" class="item-link list-button" @click="Autenticar">Sign In</a>
-              </li>
-            </ul>
-            <div class="list-block">
-              <h5 class="text-align-center">Pular</h5>
-            </div>
-            <div class="block-footer">Some text with login information.</div>
-          </div>
-        </form>
-      </div>
+        <div class="list">
+          <ul>
+            <li>
+              <a href="#" class="item-link list-button" @click="Autenticar">Sign In</a>
+            </li>
+            <li>
+              <a href="/" class="item-link text-align-center">
+                <h5 class="text-align-center" @click="closePage">Pular</h5>
+              </a>
+            </li>
+
+            <div class="block-footer">Verifique as informações atuais sobre o COVID-19.</div>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -73,27 +61,35 @@
         this.username = e.target.value;
         this.$update();
       },
-       Autenticar(){
-        let user = {login:this.username, senha:this.password}
+      Autenticar() {
+        let user = { login: this.username, senha: this.password }
         let context = this
-        this.$f7.request.postJSON('https://ienvironmentrestapi.azurewebsites.net/api/Usuario/Autenticar', user, function(data){
+        this.$f7.request.postJSON('https://ienvironmentrestapi.azurewebsites.net/api/Usuario/Autenticar', user, function (data) {
           this.autenticado = true
+          closePage()
           context.$f7.dialog.alert('Autenticado PORRAAAAA')
-        }, function(data){
+        }, function (data) {
           this.mensagem = JSON.parse(data.response)
           context.$f7.dialog.alert(this.mensagem)
         })
       },
-      CriarUsuario(){
-        let user = {nomeUsuario:this.username, senha:this.password}
+      CriarUsuario() {
+        let user = { nomeUsuario: this.username, senha: this.password }
         let context = this
-        this.$f7.request.postJSON('https://ienvironmentrestapi.azurewebsites.net/api/Usuario/', user, function(data){
+        this.$f7.request.postJSON('https://ienvironmentrestapi.azurewebsites.net/api/Usuario/', user, function (data) {
           this.autenticado = true
           context.$f7.dialog.alert('Usuario criado com sucesso')
-        }, function(data){
+        }, function (data) {
           this.mensagem = JSON.parse(data.response)
           context.$f7.dialog.alert(this.mensagem)
         })
+      },
+      closePage() {
+        var $ = this.$;
+        var app = this.$app;
+        var router = this.$router;
+        app.loginScreen.close();
+        router.back();
       },
       updatePassword(e) {
         this.password = e.target.value;

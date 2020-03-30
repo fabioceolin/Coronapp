@@ -38,6 +38,7 @@
             </div>
             <div class="list search-list searchbar-found">
                 <ul id="countries">
+                    
                 </ul>
             </div>
         </div>
@@ -48,20 +49,6 @@
     import $$ from 'dom7'
     import Framework7 from 'framework7/framework7.esm.bundle.js';
     export default {
-        methods: {
-            // getCountriesList: function () {
-            //     Framework7.request.get('https://api.covid19api.com/countries', null, function (data) {
-            //         var todos = JSON.parse(data)
-            //         var comp = $$('#countries');
-            //         var paises = []
-            //         todos.forEach(element => {
-            //             comp.append('<li>'+element.Country+'</li>')
-            //         })
-            //         console.log({ paises: paises })
-            //         data: paises
-            //     })
-            // },
-        },
         on: {
             pageMounted: function (e, page) {
                 var self = this;
@@ -70,17 +57,20 @@
                     var todos = JSON.parse(data)
                     var comp = $$('#countries');
                     var paises = []
+                    todos.shift()
+                    console.log(todos)
                     todos.forEach(element => {
                         comp.append(
-                            `<li class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">${element.Country}</div>
-                                </div>
+                            `<li>
+                                <a href="/timeline/country/${element.Slug}/" class="item-link item-content">
+                                    <div class="item-inner">
+                                            <div class="item-title">${element.Country}</div>
+                                    </div>
+                                </a>
                             </li>`
                         )
                     })
                     self.$app.dialog.close();
-                    console.log({ paises: paises })
                 })
             },
         },
