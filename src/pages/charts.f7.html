@@ -104,6 +104,25 @@
                 }
             });
             },
+        },
+        methods:{
+            dadosGraficoDayOne(pais, color){
+                if(typeof(pais)==='string'){
+                    pais == "brazil"
+                }
+                this.$f7.request.get(`"https://api.covid19api.com/country/${pais}/status/confirmed"`, null, function (data) {
+                   let dataarray = JSON.parse(data)
+                   let dadosFormatados = []
+                   let labels = [0]
+                   let indice = 1
+                   dataarray.forEach(element=>{
+                            labels.push(indice++)
+                            dadosFormatados.push(element.Cases)
+                        })    
+                    });
+                    return {data:dadosFormatados, label:pais, borderColor:color, fill:false}
+                }
+                
+            }
         }
-    };
 </script>
