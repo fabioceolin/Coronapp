@@ -117,7 +117,7 @@
         },
         methods:{
             compareFirstCountryToNextCountry(){
-                var firstchartdata = localStorage["firstchartdata"]
+                var firstchartdata = sessionStorage["firstchartdata"]
                 if(typeof firstchartdata === 'undefined'){
                     this.$f7.dialog.alert('Clica no botao la em cima pfvr ajuda ae pae')
                     return
@@ -207,7 +207,7 @@
                             }
                         })
                         var myObj = firstchartdata
-                        localStorage["firstchartdata"] = JSON.stringify({data:dadosFormatados, label:country, borderColor:cor, fill:false})
+                        sessionStorage["firstchartdata"] = JSON.stringify({data:dadosFormatados, label:country, borderColor:cor, fill:false})
 
                     self.$update()   
                 });                      
