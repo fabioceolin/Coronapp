@@ -14,10 +14,11 @@
           </div>
 
         <div class="page-content">
-
+            <button @click="dadosGraficoDayOne"> AUMENTE SEU PENIS </button>
             <canvas id="myChart"></canvas>
+                <input type="text" placeholder="insira o nome do segundo pais" id="CHAMAFI">
+                <button @click="compareFirstCountryToNextCountry">ADD</button>
             <canvas id="myChart2"></canvas>
-
         </div>
     </div>
 </template>
@@ -62,7 +63,7 @@
                         }
                     }
                 });
-
+                return true
                 var ctx2 = $$("#myChart2");
                 var myChart = new Chart(ctx2, {
                     type: 'line',
@@ -100,29 +101,117 @@
                         title: {
                             display: true,
                             text: 'World population per region (in millions)'
+                        },
+                        scales:{
+                            xAxes:[{
+                                display:true
+                            }],
+                            yAxes: [{
+                                display: true,
+                                type: 'logarithmic'
+                            }]
                         }
-                }
-            });
+                    }
+                });
             },
         },
         methods:{
-            dadosGraficoDayOne(pais, color){
-                if(typeof(pais)==='string'){
-                    pais == "brazil"
+            compareFirstCountryToNextCountry(){
+                var firstchartdata = localStorage["firstchartdata"]
+                if(typeof firstchartdata === 'undefined'){
+                    this.$f7.dialog.alert('Clica no botao la em cima pfvr ajuda ae pae')
+                    return
                 }
-                this.$f7.request.get(`"https://api.covid19api.com/country/${pais}/status/confirmed"`, null, function (data) {
+                firstchartdata = JSON.parse(firstchartdata)
+                var country = $$("#CHAMAFI").val()
+                var url = "https://api.covid19api.com/country/".concat(country, "/status/confirmed")
+                var cor = "#8e5ea2"
+                var self = this
+                let dadosFormatados
+                let labels
+                this.$f7.request.get(url, null, function (data) {
                    let dataarray = JSON.parse(data)
-                   let dadosFormatados = []
-                   let labels = [0]
+                   dadosFormatados = []
+                   labels = [0]
                    let indice = 1
                    dataarray.forEach(element=>{
                             labels.push(indice++)
                             dadosFormatados.push(element.Cases)
-                        })    
-                    });
-                    return {data:dadosFormatados, label:pais, borderColor:color, fill:false}
-                }
-                
-            }
+                    }) 
+                    var secondchartdata = {
+                                data:dadosFormatados, label:country, borderColor:cor, fill:false
+                            }
+                    var myChart = new Chart($$("#myChart2"), {
+                        type: 'line',
+                        data: {
+                            labels:labels,
+                            datasets: [firstchartdata, secondchartdata]                            
+                        }, options: {
+                                  title: {
+                                    display: true,
+                                    text: `Curva de aumento de casos (logaritimica)`
+                                },
+                                scales:{
+                                    xAxes:[{
+                                        display:true
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        type: 'logarithmic'
+                                    }]
+                                }
+                            }
+                        })
+
+                    self.$update()   
+                });                      
+            },
+            dadosGraficoDayOne(pais, color){
+                let country = "brazil"
+                var url = "https://api.covid19api.com/country/".concat(country, "/status/confirmed")
+                var cor = "#c45850"
+                var self = this
+                let dadosFormatados
+                let labels
+                this.$f7.request.get(url, null, function (data) {
+                   let dataarray = JSON.parse(data)
+                   dadosFormatados = []
+                   labels = [0]
+                   let indice = 1
+                   dataarray.forEach(element=>{
+                            labels.push(indice++)
+                            dadosFormatados.push(element.Cases)
+                    }) 
+                    var firstchartdata = {
+                                data:dadosFormatados, label:country, borderColor:cor, fill:false
+                            }
+                    var myChart = new Chart($$("#myChart2"), {
+                        type: 'line',
+                        data: {
+                            labels:labels,
+                            datasets: [firstchartdata]                            
+                        }, options: {
+                                  title: {
+                                    display: true,
+                                    text: `Curva de aumento de casos (logaritimica)`
+                                },
+                                scales:{
+                                    xAxes:[{
+                                        display:true
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        type: 'logarithmic'
+                                    }]
+                                }
+                            }
+                        })
+                        var myObj = firstchartdata
+                        localStorage["firstchartdata"] = JSON.stringify({data:dadosFormatados, label:country, borderColor:cor, fill:false})
+
+                    self.$update()   
+                });                      
+            }   
         }
+     }
 </script>
