@@ -52,3 +52,5 @@ var app = new Framework7({
     },
   },
 });
+
+export default { app }
