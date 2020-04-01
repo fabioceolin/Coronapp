@@ -124,7 +124,7 @@
                 }
                 firstchartdata = JSON.parse(firstchartdata)
                 var country = $$("#CHAMAFI").val()
-                var url = "https://api.covid19api.com/country/".concat(country, "/status/confirmed")
+                var url = "https://api.covid19api.com/total/country/".concat(country, "/status/confirmed")
                 var cor = "#8e5ea2"
                 var self = this
                 let dadosFormatados
@@ -168,7 +168,7 @@
             },
             dadosGraficoDayOne(pais, color){
                 let country = "brazil"
-                var url = "https://api.covid19api.com/country/".concat(country, "/status/confirmed")
+                var url = "https://api.covid19api.com/total/country/".concat(country, "/status/confirmed")
                 var cor = "#c45850"
                 var self = this
                 let dadosFormatados
