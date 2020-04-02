@@ -128,8 +128,12 @@
                 console.log(smartSelect1.getValue())
                 console.log(smartSelect2.getValue())
                 let country = smartSelect1.getValue()
-                var url = "https://api.covid19api.com/total/country/".concat(smartSelect1.getValue(), "/status/confirmed")
+                let secondCountry = smartSelect2.getValue()
+                let firstChartData
+                var url = "https://api.covid19api.com/total/country/".concat(country, "/status/confirmed")
+                var url2 = "https://api.covid19api.com/total/country/".concat(secondCountry, "/status/confirmed")
                 var cor = "#c45850"
+                var cor = "#8e5ea2"
                 var self = this
                 let dadosFormatados
                 let labels
@@ -142,15 +146,15 @@
                         labels.push(indice++)
                         dadosFormatados.push(element.Cases)
                     })
-                    var firstchartdata = {
+                    firstChartData = {
                         data: dadosFormatados, label: country, borderColor: cor, fill: false, pointRadius: 4, pointStyle: 'rectRot', pointBackgroundColor: cor
                     }
-                    sessionStorage["firstchartdata"] = JSON.stringify({ data: dadosFormatados, label: country, borderColor: cor, fill: false, pointRadius: 0 })
 
-                    self.$update()
+                    getSecondChartData()
                 });
+                function getSecondChartData(){
 
-                this.$f7.request.get(url, null, function (data) {
+                    self.$f7.request.get(url2, null, function (data) {
                     let dataarray = JSON.parse(data)
                     dadosFormatados = []
                     labels = [0]
@@ -160,13 +164,13 @@
                         dadosFormatados.push(element.Cases)
                     })
                     var secondchartdata = {
-                        data: dadosFormatados, label: country, borderColor: cor, fill: false, pointRadius: 0
+                        data: dadosFormatados, label: secondCountry, borderColor: cor, fill: false, pointRadius: 0
                     }
                     var myChart = new Chart($$("#myChart2"), {
                         type: 'line',
                         data: {
                             labels: labels,
-                            datasets: [firstchartdata, secondchartdata]
+                            datasets: [firstChartData, secondchartdata]
                         }, options: {
                             title: {
                                 display: true,
@@ -200,8 +204,9 @@
                         }
                     })
 
-                    self.$update()
-                });
+                        self.$update()
+                    });
+                } 
             },
             compareFirstCountryToNextCountry() {
                 var firstchartdata = sessionStorage["firstchartdata"]
