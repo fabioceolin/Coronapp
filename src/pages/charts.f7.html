@@ -48,10 +48,6 @@
             <div class="block">
                 <button @click="dadosGraficoDayOne" class="button button-raised button-fill">Refresh</button>
             </div>
-            <canvas id="myChart"></canvas>
-            <input type="text" placeholder="insira o nome do segundo pais" id="CHAMAFI">
-            <button @click="compareFirstCountryToNextCountry">ADD</button>
-            <button @click="dadosGraficoDayOne"> AUMENTE SEU PENIS </button>
             <canvas id="myChart2"></canvas>
         </div>
     </div>
@@ -62,43 +58,6 @@
     import App from '../js/app.js'
     export default {
         on: {
-            pageInit: function (e, page) {
-                var ctx = $$("#myChart");
-                var myChart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: ["January", "February", "March"],
-                        datasets: [{
-                            label: 'Recovereds',
-                            data: [100, 20, 1],
-                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }, {
-                            label: 'Infecteds',
-                            data: [150, 35, 3],
-                            backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            borderWidth: 1
-                        }, {
-                            label: 'Deaths',
-                            data: [300, 70, 10],
-                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            },
             pageMounted: function (e, page) {
                 var self = this;
                 self.$app.dialog.preloader();
@@ -127,13 +86,24 @@
                 var smartSelect2 = App.app.smartSelect.get('#smart-select-country2');
                 console.log(smartSelect1.getValue())
                 console.log(smartSelect2.getValue())
+
+                let context = this
+                
+
+                if(smartSelect1.getValue().indexOf('-') != -1 && !smartSelect2.getValue().indexOf('-') != -1)
+                {
+                    context.$f7.dialog.alert('Select the two countries to compare')
+                    return
+                }
+                
+
                 let country = smartSelect1.getValue()
                 let secondCountry = smartSelect2.getValue()
                 let firstChartData
                 var url = "https://api.covid19api.com/total/country/".concat(country, "/status/confirmed")
                 var url2 = "https://api.covid19api.com/total/country/".concat(secondCountry, "/status/confirmed")
                 var cor = "#c45850"
-                var cor = "#8e5ea2"
+                var cor2 = "#8e5ea2"
                 var self = this
                 let dadosFormatados
                 let labels
@@ -147,7 +117,7 @@
                         dadosFormatados.push(element.Cases)
                     })
                     firstChartData = {
-                        data: dadosFormatados, label: country, borderColor: cor, fill: false, pointRadius: 4, pointStyle: 'rectRot', pointBackgroundColor: cor
+                        data: dadosFormatados, label: country, borderColor: cor2, fill: false, pointRadius: 3, pointStyle: 'rectRot', pointBackgroundColor: cor
                     }
 
                     getSecondChartData()
@@ -164,7 +134,7 @@
                         dadosFormatados.push(element.Cases)
                     })
                     var secondchartdata = {
-                        data: dadosFormatados, label: secondCountry, borderColor: cor, fill: false, pointRadius: 0
+                        data: dadosFormatados, label: secondCountry, borderColor: cor, fill: false, pointRadius: 3, pointStyle: 'rectRot', pointBackgroundColor: cor
                     }
                     var myChart = new Chart($$("#myChart2"), {
                         type: 'line',
