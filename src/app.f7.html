@@ -1,35 +1,90 @@
-
 <template>
   <div id="app">
 
     <!-- Left panel with cover effect-->
-    <div class="panel panel-left panel-cover theme-dark panel-init">
+    <div class="panel panel-left panel-reveal theme-dark panel-init">
       <div class="view">
         <div class="page">
           <div class="navbar">
             <div class="navbar-bg"></div>
             <div class="navbar-inner">
-              <div class="title">Left Panel</div>
+              <div class="title">Menu</div>
             </div>
           </div>
           <div class="page-content">
-            <div class="block">Left panel content goes here</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Right panel with reveal effect-->
-    <div class="panel panel-right panel-reveal theme-dark">
-      <div class="view">
-        <div class="page">
-          <div class="navbar">
-            <div class="navbar-bg"></div>
-            <div class="navbar-inner">
-              <div class="title">Right Panel</div>
+            <div class="list">
+              <ul>
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <a href="/" class="item-title text text-align-center panel-close">
+                        Home
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <a href="/summary/" class="item-title text text-align-center panel-close">
+                        Summary
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <a href="/countryList/" class="item-title text text-align-center panel-close">
+                        Search
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <a href="/barchart/" class="item-title text text-align-center panel-close">
+                        Charts
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <a href="/about/" class="item-title text text-align-center panel-close">
+                        About
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <a href="/login/" class="item-title text text-align-center panel-close">
+                        Login
+                      </a>
+                    </div>
+                  </div>
+                </li>
+                <!-- <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                    <div class="item-inner">
+                      <div class="item-title">John Doe</div>
+                      <div class="item-after"> <span class="badge">5</span></div>
+                    </div>
+                  </div>
+                </li> -->
+              </ul>
             </div>
-          </div>
-          <div class="page-content">
-            <div class="block">Right panel content goes here</div>
           </div>
         </div>
       </div>
@@ -55,48 +110,6 @@
           <div class="page-content">
             <div class="block">
               <p>Popup content goes here.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Login Screen -->
-    <div class="login-screen" id="my-login-screen">
-      <div class="view">
-        <div class="page">
-          <div class="page-content login-screen-content">
-            <div class="login-screen-title">Login</div>
-            <div class="list">
-              <ul>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Username</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="username" placeholder="Your username" value="{{username}}" @input="updateUsername">
-
-                    </div>
-                  </div>
-                </li>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Password</div>
-                    <div class="item-input-wrap">
-                      <input type="password" name="password" placeholder="Your password" value="{{password}}" @input="updatePassword">
-
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="list">
-              <ul>
-                <li>
-                  <a href="#" class="item-link list-button login-button" @click="alertLoginData">Sign In</a>
-
-                </li>
-              </ul>
-              <div class="block-footer">Some text about login information.<br>Click "Sign In" to close Login Screen</div>
             </div>
           </div>
         </div>

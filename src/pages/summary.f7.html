@@ -1,0 +1,166 @@
+<template>
+    <div class="page">
+        <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+              <div class="left">
+                <a href="#" class="link back">
+                  <i class="icon icon-back"></i>
+                  <span class="if-not-md">Back</span>
+                </a>
+              </div>
+              <div class="title">Summary</div>
+            </div>
+          </div>
+
+        <div class="toolbar toolbar-bottom tabbar">
+            <div class="toolbar-inner">
+                <a href="#confirmed" class="tab-link tab-link-active">
+                    <div class="row no-gap" id="confirmedQtd">
+                        
+                    </div>
+                    <div class="row no-gap">
+                        <div class="col-100">Confirmed</div>
+                    </div>
+                </a>
+                <a href="#deaths" class="tab-link">
+                    <div class="row no-gap" id="deathsQtd">
+                        
+                    </div>
+                    <div class="row no-gap">
+                        <div class="col-100">Deaths</div>
+                    </div>
+                </a>
+                <a href="#recoveries" class="tab-link">
+                    <div class="row no-gap" id="recoveriesQtd">
+                        
+                    </div>
+                    <div class="row no-gap">
+                        <div class="col-100">Recoveries</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="tabs-swipeable-wrap">
+            <div class="tabs">
+                <div id="confirmed" class="page-content tab tab-active">
+                    <div class="block-title">Confirmed</div>
+                    
+                </div>
+                <div id="deaths" class="page-content tab">
+                    <div class="block-title">Deaths</div>
+                    
+                </div>
+                <div id="recoveries" class="page-content tab">
+                    <div class="block-title">Recoveries</div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import $$ from 'dom7'
+    import Framework7 from 'framework7/framework7.esm.bundle.js';
+    function mountDiv(country, number, newConfirmed, totalConfirmed, newDeaths, totalDeaths, newRecoveries, totalRecoveries) {
+                return `<div class="card card-expandable" style="height: 110px;">
+                            <div class="card-content">
+                                <a href="#" class="link card-close card-opened-fade-in color-white"
+                                    style="position: absolute; right: 15px; top: 15px">
+                                    <i class="icon f7-icons">xmark_circle_fill</i>Fechar
+                                </a>
+                                <div class="card-header display-block">
+                                    ${country}
+                                </div>
+                                <div class="card-content-padding">
+                                    <div class="row no-gap">
+                                        <div class="col-70">${country}</div>
+                                        <div class="col-30">${number}</div>
+                                    </div>
+                                    <div class="display-block margin-top">
+                                        <div class="row no-gap">
+                                            <div class="col-70">New Confirmed:</div>
+                                            <div class="col-30">${newConfirmed}</div>
+                                        </div>
+                                        <div class="row no-gap">
+                                            <div class="col-70">Total Confirmed:</div>
+                                            <div class="col-30">${totalConfirmed}</div>
+                                        </div>
+                                        <div class="row no-gap">
+                                            <div class="col-70">New Deaths:</div>
+                                            <div class="col-30">${newDeaths}</div>
+                                        </div>
+                                        <div class="row no-gap">
+                                            <div class="col-70">Total Deaths:</div>
+                                            <div class="col-30">${totalDeaths}</div>
+                                        </div>
+                                        <div class="row no-gap">
+                                            <div class="col-70">New Recoveries:</div>
+                                            <div class="col-30">${newRecoveries}</div>
+                                        </div>
+                                        <div class="row no-gap">
+                                            <div class="col-70">Total Recoveries:</div>
+                                            <div class="col-30">${totalRecoveries}</div>
+                                        </div>
+                                        <p>
+                                            <a href="#" class="button button-fill card-close">Close</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>`
+            }
+    export default {
+        on: {
+            pageMounted: function (e, page) {
+                var self = this;
+                self.$app.dialog.preloader();
+                Framework7.request.get('https://api.covid19api.com/summary', null, function (data) {
+                    var todos = JSON.parse(data)
+
+                    var confirmedDiv = $$('#confirmed');
+                    var deathsDiv = $$('#deaths');
+                    var recoveriesDiv = $$('#recoveries');
+                    var confirmedQtdDiv = $$('#confirmedQtd');
+                    var deathsQtdDiv = $$('#deathsQtd');
+                    var recoveriesQtdDiv = $$('#recoveriesQtd');
+
+                    var testeDoTeste = localStorage["teste"]
+
+                    if (testeDoTeste === "Teste") {
+                        console.log("DADOS IN MEMORY MLK DO CARALHOOOOO PORRAAA")
+                    } else {
+                        localStorage["teste"] = "Teste"
+                        console.log("N TINHA NADA NA PARADA LA ENTAO COLOCAMOS ESSA PORRA PRA TESTAR VLW E NOIS")
+                    }
+
+
+                    localStorage["CountryData"] = JSON.stringify(todos)
+                    let deaths = 0
+                    let recovereds = 0
+                    let cases = 0
+                    todos.Countries.shift();
+                    console.log(typeof(todos))
+                    console.log(todos)
+                    todos.Countries.forEach(element => {
+                        deaths = deaths + element.TotalDeaths
+                        recovereds = recovereds + element.TotalRecovered
+                        cases = cases + element.TotalConfirmed
+
+                        confirmedDiv.append(mountDiv(element.Country, element.TotalConfirmed, element.NewConfirmed, element.TotalConfirmed, element.NewDeaths, element.TotalDeaths, element.NewRecovered, element.TotalRecovered))
+                        deathsDiv.append(mountDiv(element.Country, element.TotalDeaths, element.NewConfirmed, element.TotalConfirmed, element.NewDeaths, element.TotalDeaths, element.NewRecovered, element.TotalRecovered))
+                        recoveriesDiv.append(mountDiv(element.Country, element.TotalRecovered, element.NewConfirmed, element.TotalConfirmed, element.NewDeaths, element.TotalDeaths, element.NewRecovered, element.TotalRecovered))
+
+                    });
+                    self.$app.dialog.close();
+                    confirmedQtdDiv.append(`<div class="col-100">${cases}</div>`)
+                    deathsQtdDiv.append(`<div class="col-100">${deaths}</div>`)
+                    recoveriesQtdDiv.append(`<div class="col-100">${recovereds}</div>`)
+                    console.log('casos: ' + cases + ' mortes: ' + deaths + ' curados: ' + recovereds, ' ts: ' + todos.Date)
+                    return { confirmed: cases, deaths: deaths, recovereds: recovereds, date: todos.Date }
+                })
+            },
+        },
+    }
+</script>

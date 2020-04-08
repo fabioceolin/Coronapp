@@ -1,0 +1,249 @@
+<template>
+    <div data-name="barchart" class="page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Chart</div>
+            </div>
+        </div>
+
+        <div class="page-content hide-navbar-on-scroll">
+            <div class="block-title text-align-center">Switch to landscape orientation</div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <a class="item-link smart-select smart-select-init" id="smart-select-country1" data-open-in="popup" data-searchbar="true"
+                            data-searchbar-placeholder="Search country">
+                            <select id="Country1" name="Country1">
+                                <!-- Carregado atraves da api -->
+                            </select>
+                            <div class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">Country 1</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="item-link smart-select smart-select-init" id="smart-select-country2" data-open-in="popup" data-searchbar="true"
+                            data-searchbar-placeholder="Search country">
+                            <select id="Country2" name="Country2">
+                                <!-- Carregado atraves da api -->
+                            </select>
+                            <div class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">Country 2</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="block">
+                <button @click="dadosGraficoDayOne" class="button button-raised button-fill">Refresh</button>
+            </div>
+            <canvas id="myChart2"></canvas>
+        </div>
+    </div>
+</template>
+<script>
+    import $$ from 'dom7';
+    import Chart from 'chart.js';
+    import App from '../js/app.js'
+    export default {
+        on: {
+            pageMounted: function (e, page) {
+                var self = this;
+                self.$app.dialog.preloader();
+                this.$f7.request.get('https://api.covid19api.com/countries', null, function (data) {
+                    var todos = JSON.parse(data)
+                    var country1 = $$('#Country1');
+                    var country2 = $$('#Country2');
+                    var paises = []
+                    todos.shift()
+                    console.log(todos)
+                    todos.forEach(element => {
+                        country1.append(
+                            `<option value="${element.Slug}">${element.Country}</option>`
+                        )
+                        country2.append(
+                            `<option value="${element.Slug}">${element.Country}</option>`
+                        )
+                    })
+                    self.$app.dialog.close();
+                })
+            },
+        },
+        methods: {
+            dadosGraficoDayOne(pais) {
+                var smartSelect1 = App.app.smartSelect.get('#smart-select-country1');
+                var smartSelect2 = App.app.smartSelect.get('#smart-select-country2');
+                console.log(smartSelect1.getValue())
+                console.log(smartSelect2.getValue())
+
+                let context = this
+                
+
+                if(smartSelect1.getValue().indexOf('-') != -1 && !smartSelect2.getValue().indexOf('-') != -1)
+                {
+                    context.$f7.dialog.alert('Select the two countries to compare')
+                    return
+                }
+                
+
+                let country = smartSelect1.getValue()
+                let secondCountry = smartSelect2.getValue()
+                let firstChartData
+                var url = "https://api.covid19api.com/total/country/".concat(country, "/status/confirmed")
+                var url2 = "https://api.covid19api.com/total/country/".concat(secondCountry, "/status/confirmed")
+                var cor = "#c45850"
+                var cor2 = "#8e5ea2"
+                var self = this
+                let dadosFormatados
+                let labels
+                this.$f7.request.get(url, null, function (data) {
+                    let dataarray = JSON.parse(data)
+                    dadosFormatados = []
+                    labels = [0]
+                    let indice = 1
+                    dataarray.forEach(element => {
+                        labels.push(indice++)
+                        dadosFormatados.push(element.Cases)
+                    })
+                    firstChartData = {
+                        data: dadosFormatados, label: country, borderColor: cor2, fill: false, pointRadius: 3, pointStyle: 'rectRot', pointBackgroundColor: cor
+                    }
+
+                    getSecondChartData()
+                });
+                function getSecondChartData(){
+
+                    self.$f7.request.get(url2, null, function (data) {
+                    let dataarray = JSON.parse(data)
+                    dadosFormatados = []
+                    labels = [0]
+                    let indice = 1
+                    dataarray.forEach(element => {
+                        labels.push(indice++)
+                        dadosFormatados.push(element.Cases)
+                    })
+                    var secondchartdata = {
+                        data: dadosFormatados, label: secondCountry, borderColor: cor, fill: false, pointRadius: 3, pointStyle: 'rectRot', pointBackgroundColor: cor
+                    }
+                    var myChart = new Chart($$("#myChart2"), {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [firstChartData, secondchartdata]
+                        }, options: {
+                            title: {
+                                display: true,
+                                text: `Curva de aumento de casos (logaritimica)`
+                            },
+                            scales: {
+                                xAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Days',
+                                        padding: 10
+                                    },
+                                }],
+                                yAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Confirmed Cases',
+                                        padding: 1,
+                                        lineHeight: 1
+                                    },
+                                    ticks: {
+                                        beginAtZero: false
+                                    },
+                                }]
+                            },
+                            animation: {
+                                duration: 5000
+                            }
+                        }
+                    })
+
+                        self.$update()
+                    });
+                } 
+            },
+            compareFirstCountryToNextCountry() {
+                var firstchartdata = sessionStorage["firstchartdata"]
+                if (typeof firstchartdata === 'undefined') {
+                    this.$f7.dialog.alert('Clica no botao la em cima pfvr ajuda ae pae')
+                    return
+                }
+                firstchartdata = JSON.parse(firstchartdata)
+                var country = $$("#CHAMAFI").val()
+                var url = "https://api.covid19api.com/total/country/".concat(smartSelect2.getValue(), "/status/confirmed")
+                var cor = "#8e5ea2"
+                var self = this
+                let dadosFormatados
+                let labels
+                this.$f7.request.get(url, null, function (data) {
+                    let dataarray = JSON.parse(data)
+                    dadosFormatados = []
+                    labels = [0]
+                    let indice = 1
+                    dataarray.forEach(element => {
+                        labels.push(indice++)
+                        dadosFormatados.push(element.Cases)
+                    })
+                    var secondchartdata = {
+                        data: dadosFormatados, label: country, borderColor: cor, fill: false, pointRadius: 0
+                    }
+                    var myChart = new Chart($$("#myChart2"), {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [firstchartdata, secondchartdata]
+                        }, options: {
+                            title: {
+                                display: true,
+                                text: `Curva de aumento de casos (logaritimica)`
+                            },
+                            scales: {
+                                xAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Days',
+                                        padding: 10
+                                    },
+                                }],
+                                yAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Confirmed Cases',
+                                        padding: 1,
+                                        lineHeight: 1
+                                    },
+                                    ticks: {
+                                        beginAtZero: false
+                                    },
+                                }]
+                            },
+                            animation: {
+                                duration: 5000
+                            }
+                        }
+                    })
+
+                    self.$update()
+                });
+            },
+        }
+    }
+</script>

@@ -3,6 +3,7 @@ import Framework7 from 'framework7/framework7.esm.bundle.js';
 
 // Import F7 Styles
 import 'framework7/css/framework7.bundle.css';
+import '../fonts/framework7-icons.css'
 
 // Import Icons and App Custom Styles
 import '../css/icons.css';
@@ -15,10 +16,14 @@ import routes from './routes.js';
 // Import main app component
 import App from '../app.f7.html';
 
+// Custom Import
+// import Script from './chartscript'
+// import Controller from './apicontroller'
+
 var app = new Framework7({
   root: '#app', // App root element
   component: App, // App main component
-  id: 'io.framework7.coronapp', // App bundle ID
+  id: 'br.com.coronapp', // App bundle ID
   name: 'Coronapp', // App name
   theme: 'auto', // Automatic theme detection
 
@@ -47,3 +52,5 @@ var app = new Framework7({
     },
   },
 });
+
+export default { app }
